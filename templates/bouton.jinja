@@ -1,0 +1,41 @@
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const flipswitch = document.querySelector('.flipswitch-cb');
+    
+    // Vérifier si le mode sombre est déjà activé dans le stockage local
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    
+    // Mettre à jour l'état du flipswitch en fonction du mode sombre
+    flipswitch.checked = isDarkMode;
+    
+    // Appliquer le mode sombre si nécessaire
+    toggleDarkMode(isDarkMode);
+    
+    // Écouter les changements d'état du flipswitch
+    flipswitch.addEventListener('change', function () {
+        const isDarkMode = flipswitch.checked;
+        
+        // Mettre à jour le mode sombre dans le stockage local
+        localStorage.setItem('darkMode', isDarkMode);
+        
+        // Appliquer le mode sombre
+        toggleDarkMode(isDarkMode);
+    });
+});
+
+function toggleDarkMode(isDarkMode) {
+    if (isDarkMode) {
+        document.querySelector('link[href="{{ url_for('static', filename='style/light/style.css') }}"]').disabled = false;
+        document.querySelector('link[href="{{ url_for('static', filename='style/dark/style.css') }}"]').disabled = true;
+        // Activer le mode sombre
+        
+    } else {
+        document.querySelector('link[href="{{ url_for('static', filename='style/light/style.css') }}"]').disabled = true;
+        document.querySelector('link[href="{{ url_for('static', filename='style/dark/style.css') }}"]').disabled = false;
+        // Activer le mode clair
+        
+    }
+}
+
+
+</script>

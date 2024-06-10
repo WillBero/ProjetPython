@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centre Proméo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/light/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/dark/style.css') }}" disabled>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+    <script src="{{ url_for('static', filename='scripts/index.js') }}" defer></script>
+    
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+
+</head>
+
+<body>
+    <div class="background-image"></div>
+    <header>
+        <img src="../static/style/images/download.png" alt="Logo" class="logo">
+        <h1>Centre de Formation Proméo</h1>
+
+        <div class="flipswitch">
+            <input type="checkbox" name="flipswitch" class="flipswitch-cb" id="fs" checked>
+            <label class="flipswitch-label" for="fs">
+                <div class="flipswitch-inner"></div>
+                <div class="flipswitch-switch"></div>
+            </label>
+        </div>
+
+    </header>
+
+    <nav>
+    
+        <ul>
+            <li><a href="#accueil" onclick="afficherPage('accueil')">Accueil</a></li>
+            <li><a href="#rdv" onclick="afficherPage('rdv')">Rendez-vous</a></li>
+            <li><a href="#formateur" onclick="afficherPage('espaceFormateur')">Espace Formateur</a></li>
+            <li><a href="#contact" onclick="afficherPage('contact')">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div id="accueil" class="page">
+
+        <h2>Accueil</h2>
+        <p>Bienvenue sur l'outil de prise de rendez-vous des centres de formations Proméo. Prenez rendez-vous dès
+            maintenant !</p>
+
+        <!-- <button onclick="pagerdv()">Je veux prendre rendez-vous !</button> -->
+    </div>
+
+    <div id="rdv" class="page">
+        <div class="ListesCentres">
+        <ul>
+            {% for centre in centres %}
+             <li onclick="afficherInfosCentre({{ centre.id_centre }})">
+                <a>{{ centre.ville }}</a>
+            </li>
+            {% endfor %}
+            </ul>
+        </div>
+
+          <div id="formateursBar" style="display: none;">
+        <!-- Barre des formateurs du centre -->
+        <ul id="formateursList"></ul>
+        </div>
+
+        <div id="formateursBar" style="display: none;">
+            <!-- Barre des formateurs du centre -->
+        </div>
+        <div id="infosCentre" style="display: none;" class="page">
+        </div>
+
+        <div id="calendar2"></div>
+    </div>
+ 
+
+
+
+    <div id="contact" class="page">
+
+        <div id="cadre">
+            <h2>Contact</h2>
+            <div class="separation"></div>
+            <form id="contactForm">
+                <div class="form-group" class="page">
+                    </i><label for="nom"> Nom :</label>
+                    <input type="text" id="nom" name="nom" placeholder="entrez votre nom" required>
+                </div>
+
+                <div class="form-group" class="page">
+                    <label for="prenom"> Prenom :</label>
+                    <input type="text" id="prenom" name="prenom" placeholder="entrez votre prenom" required>
+                </div>
+
+                <div class="form-group" class="page">
+                    <label for="email"> Email :</label>
+                    <input type="email" id="email" name="email" placeholder="entrez votre email" required>
+                </div>
+
+                <div class="form-group" class="page">
+                    <label for="message">Message :</label>
+                    <textarea id="message" name="message" rows="4" placeholder="ecrivez votre message"
+                        required></textarea>
+                </div>
+
+                <div class="form-group" class="page">
+                    <label for="formateur"> Formateur :</label>
+                    <select id="formateur" name="formateur">
+                        <option value="">-- Sélectionnez un formateur --</option>
+                        {% for formateur in formateur %}
+                        <option value="{{ formateur.id_formateur }}">{{ formateur.nom }} {{ formateur.prenom }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class='pied-formulaire'>
+                        <button type="button" onclick="envoyerEmail()"></i> Envoyer</button>
+                    </div>
+                </div>
+            </form>
+            <div id="messageSucces" style="display: none;" class="page"> Message envoyé avec succès !</div>
+        </div>
+        
+    </div>
+
+    </div>
+
+
+    <div id="espaceFormateur" class="page">
+        <div id="cadre">
+            <h2>Espace Formateur</h2>
+            <div id="error-message" style="color: red;"></div>
+            <form id="connexionForm" action="/connexion" method="POST">
+                <div class="form-group" class="page">
+                    <label for="email">Email :</label>
+                    <input type="email" id="emailConnexion" name="emailConnexion" placeholder="entrez votre email"
+                        required>
+                </div>
+                <div class="form-group" class="page">
+                    <label for="password">Mot de passe :</label>
+                    <input type="password" id="password" name="password" placeholder="entrez votre mot de passe"
+                        required>
+                </div>
+                <button type="submit">Se connecter</button>
+            </form>
+        </div>
+    </div>
+
+
+
+
+    <!-- Affichage des informations -->
+    <div id="infosContainer" class="page"></div>
+    </div>
+
+
+</body>
+
+</html>
+
+
+{% include 'bouton.jinja' %}

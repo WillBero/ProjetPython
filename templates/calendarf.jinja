@@ -1,0 +1,94 @@
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        allDaySlot: false,
+        weekends: false,
+        slotMinTime: '07:00:00',
+        slotMaxTime: '18:00:00',
+        locale: 'fr',
+        initialView: 'timeGridWeek',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay,listYear'
+        },
+        buttonText: {
+            today: 'Aujourd\'hui',
+            month: 'Mois',
+            week: 'Semaines',
+            day: 'Jours',
+            list: 'Liste'
+        },
+        displayEventTime: true,
+        dateClick: function (info) {
+            // Récupérer la date cliquée
+            var dateClicked = new Date(info.dateStr);
+            var formattedDate = dateClicked.getFullYear() + '-' + ('0' + (dateClicked.getMonth() + 1)).slice(-2) + '-' + ('0' + dateClicked.getDate()).slice(-2) + 'T' + ('0' + dateClicked.getHours()).slice(-2) + ':' + ('0' + dateClicked.getMinutes()).slice(-2);
+
+            console.log(dateClicked)
+            // Afficher la fenêtre modale pour ajouter une date
+            afficherModalAjouterDate(formattedDate);
+        },
+
+        eventClick: function (info) {
+            // Afficher la fenêtre modale pour afficher les détails du rendez-vous
+            afficherModalDetailsRdv(info.event.extendedProps);
+        }
+    });
+
+    // Convertir les rendez-vous pris en événements
+    var eventsPris = [];
+    {% for rdv in rdv_pris %}
+    var debutRdv = new Date('{{ rdv.debut }}');
+    var finRdv = new Date('{{ rdv.fin }}');
+    var dureeRdv = (finRdv - debutRdv);
+    var heures = Math.floor(dureeRdv / (1000 * 60 * 60));
+    var minutes = Math.floor((dureeRdv % (1000 * 60 * 60)) / (1000 * 60));
+
+    eventsPris.push({
+        title: '{{ rdv.nom }} {{ rdv.prenom }}',
+        start: '{{ rdv.debut }}', 
+          end:'{{rdv.fin}}',// Format : 'YYYY-MM-DD'
+        nom: '{{ rdv.nom }}',
+        prenom: '{{ rdv.prenom }}',
+        email: '{{ rdv.email }}',
+        telephone: '{{ rdv.telephone }}',
+        titre: 'Rendez-vous à venir',
+        duree:heures + " : " + minutes,
+        bite: '{{rdv.debut}}',
+        rdv: '{{rdv.id_rdv}}'
+    });
+    {% endfor %}
+
+    // Convertir les rendez-vous non pris en événements
+    var eventsNonPris = [];
+    {% for rdv in rdv_nonpris %}
+    var debutRdv = new Date('{{ rdv.debut }}');
+    var finRdv = new Date('{{ rdv.fin }}');
+    var dureeRdv = (finRdv - debutRdv);
+    var heures = Math.floor(dureeRdv / (1000 * 60 * 60));
+    var minutes = Math.floor((dureeRdv % (1000 * 60 * 60)) / (1000 * 60));
+    eventsNonPris.push({
+        title: 'Rendez-vous non pris',
+        start: '{{ rdv.debut }}',
+        end:'{{rdv.fin}}',
+        titre: 'Rendez-vous non pris',
+        nom: 'aucun',
+        prenom: 'aucun',
+        email: 'aucun',
+        telephone: 'aucun',
+        duree: heures + " : " + minutes,
+        debut: '{{rdv.debut}}',// Format : 'YYYY-MM-DD"
+        rdv: '{{rdv.id_rdv}}'
+    });
+    {% endfor %}
+
+    // Ajouter les événements au calendrier
+    calendar.addEventSource(eventsPris);
+    calendar.addEventSource(eventsNonPris);
+
+    calendar.render();
+});
+
+</script>

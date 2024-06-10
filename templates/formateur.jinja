@@ -1,0 +1,38 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centre Proméo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/light/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/dark/style.css') }}">
+    <script src="{{ url_for('static', filename='scripts/formateur.js') }}" ></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+</head>
+
+<body>
+<header>
+    <img src="../static/style/images/download.png" alt="Logo" class="logo">
+    <h1> Bienvenue {{formateur.nom}} {{formateur.prenom}}</h1>
+    <div class="flipswitch">
+	<input type="checkbox" name="flipswitch" class="flipswitch-cb" id="fs" checked>
+	<label class="flipswitch-label" for="fs">
+		<div class="flipswitch-inner"></div>
+		<div class="flipswitch-switch"></div>
+	</label>
+</div>
+</header>
+<br>
+
+<div id="calendar"></div>
+
+<br>
+<div id="deconnexion" class="deconnexion">
+
+    <form action="/deconnexion" method="POST">
+        <button type="submit">deconnexion</button>
+    </form>
+
+</div>
+</body>
+
+{% include 'bouton.jinja' %}
+{% include 'calendarf.jinja' %}
