@@ -22,7 +22,7 @@ USE `promeo`;
 -- Listage de la structure de table promeo. centres
 CREATE TABLE IF NOT EXISTS `centres` (
   `id_centre` int NOT NULL AUTO_INCREMENT,
-  `ville` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ville` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id_centre`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `formateurs` (
   `id_formateur` int NOT NULL AUTO_INCREMENT,
   `nom` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `prenom` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `email` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `email` varchar(25) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `mdp` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `telephone` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id_formateur`)
