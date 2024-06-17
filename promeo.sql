@@ -35,7 +35,7 @@ INSERT INTO `centres` (`id_centre`, `ville`) VALUES
 -- Listage de la structure de table promeo. contacts
 CREATE TABLE IF NOT EXISTS `contacts` (
   `id_contact` int NOT NULL AUTO_INCREMENT,
-  `nom` varchar(25) COLLATE utf8mb4_general_ci NOT NULL,
+  `nom` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
   `email` varchar(25) COLLATE utf8mb4_general_ci NOT NULL,
   `date` datetime NOT NULL,
   `id_formateur` int DEFAULT NULL,
