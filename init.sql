@@ -1,10 +1,6 @@
-
-CREATE DATABASE IF NOT EXISTS `promeo` 
+CREATE DATABASE IF NOT EXISTS `promeo` ;
 USE `promeo`;
 
-CREATE USER 'doodle'@'%' IDENTIFIED  BY 'doodle';
-GRANT ALL  PRIVILEGES ON *.* TO 'doodle'@'%' WITH GRANT OPTION;
-FLUSH PRIVILEGES
 
 CREATE TABLE IF NOT EXISTS `centres` (
   `id_centre` int NOT NULL AUTO_INCREMENT,
@@ -16,26 +12,6 @@ DELETE FROM `centres`;
 INSERT INTO `centres` (`id_centre`, `ville`) VALUES
 	(1, 'Compiègne'),
 	(2, 'Beauvais');
-
-CREATE TABLE IF NOT EXISTS `contacts` (
-  `id_contact` int NOT NULL AUTO_INCREMENT,
-  `nom` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(25) COLLATE utf8mb4_general_ci NOT NULL,
-  `date` datetime NOT NULL,
-  `id_formateur` int DEFAULT NULL,
-  `prenom` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `message` text COLLATE utf8mb4_general_ci,
-  PRIMARY KEY (`id_contact`),
-  KEY `fk_formateur` (`id_formateur`),
-  CONSTRAINT `fk_formateur` FOREIGN KEY (`id_formateur`) REFERENCES `formateurs` (`id_formateur`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-
-DELETE FROM `contacts`;
-INSERT INTO `contacts` (`id_contact`, `nom`, `email`, `date`, `id_formateur`, `prenom`, `message`) VALUES
-	(5, 'Berhault', 'berowilliam60@gmail.com', '2024-02-01 14:27:07', 2, 'William', 'COUCOU COUCOU'),
-	(6, 'Berhault', 'Ber', '2024-02-01 14:33:11', 2, 'WIlliam', 'dzqdk^plm'),
-	(7, 'Berhault', 'berowilliam60@gmail.com', '2024-06-03 14:57:36', 1, 'dzq', 'test');
 
 CREATE TABLE IF NOT EXISTS `formateurs` (
   `id_formateur` int NOT NULL AUTO_INCREMENT,
@@ -52,15 +28,28 @@ INSERT INTO `formateurs` (`id_formateur`, `nom`, `prenom`, `email`, `mdp`, `tele
 	(1, 'Berhault', 'William', 'berowilliam60@gmail.com', '$2y$10$ZQe2PES6/XkKqydm7C16MeKu9e29dfCo/7ZGZYGXhtOzPqOHoPZU6', '0786883088'),
 	(2, 'Douillet', 'Killian', 'kdouillet@gmail.com', '$2y$10$ZQe2PES6/XkKqydm7C16MeKu9e29dfCo/7ZGZYGXhtOzPqOHoPZU6', '0786683089');
 
+CREATE TABLE IF NOT EXISTS `contacts` (
+  `id_contact` int NOT NULL AUTO_INCREMENT,
+  `nom` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(25) COLLATE utf8mb4_general_ci NOT NULL,
+  `date` datetime NOT NULL,
+  `id_formateur` int DEFAULT NULL,
+  `prenom` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `message` text COLLATE utf8mb4_general_ci,
+  PRIMARY KEY (`id_contact`),
+  KEY `fk_formateur` (`id_formateur`),
+  CONSTRAINT `fk_formateur` FOREIGN KEY (`id_formateur`) REFERENCES `formateurs` (`id_formateur`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 CREATE TABLE IF NOT EXISTS `formateurs_centres` (
-  `id_formateur` int NOT NULL AUTO_INCREMENT,
+  `id_formateur` int NOT NULL,
   `id_centre` int NOT NULL,
   PRIMARY KEY (`id_formateur`,`id_centre`),
   KEY `id_centre` (`id_centre`),
   CONSTRAINT `formateurs_centres_ibfk_1` FOREIGN KEY (`id_formateur`) REFERENCES `formateurs` (`id_formateur`),
   CONSTRAINT `formateurs_centres_ibfk_2` FOREIGN KEY (`id_centre`) REFERENCES `centres` (`id_centre`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DELETE FROM `formateurs_centres`;
 INSERT INTO `formateurs_centres` (`id_formateur`, `id_centre`) VALUES
@@ -73,7 +62,6 @@ CREATE TABLE IF NOT EXISTS `formations` (
   `nom` varchar(15) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id_formation`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 
 DELETE FROM `formations`;
 INSERT INTO `formations` (`id_formation`, `nom`) VALUES
@@ -96,13 +84,4 @@ CREATE TABLE IF NOT EXISTS `rdv` (
   CONSTRAINT `rdv_ibfk_2` FOREIGN KEY (`id_formateur`) REFERENCES `formateurs` (`id_formateur`)
 ) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-DELETE FROM `rdv`;
-INSERT INTO `rdv` (`id_rdv`, `debut`, `fin`, `nom`, `prenom`, `email`, `telephone`, `id_formation`, `id_formateur`) VALUES
-	(79, '2024-05-07 10:00:00', '2024-05-07 10:30:00', 'Durand', 'Kevin', 'Kdurant@gmail.com', '0786883088', NULL, 1),
-	(80, '2024-05-07 13:00:00', '2024-05-07 15:00:00', NULL, NULL, NULL, NULL, NULL, 1),
-	(81, '2024-05-07 10:30:00', '2024-05-07 12:00:00', NULL, NULL, NULL, NULL, NULL, 1),
-	(82, '2024-05-07 08:00:00', '2024-05-07 10:00:00', NULL, NULL, NULL, NULL, NULL, 1),
-	(84, '2024-05-17 08:00:00', '2024-05-17 10:00:00', NULL, NULL, NULL, NULL, NULL, 1),
-	(85, '2024-05-17 11:00:00', '2024-05-17 17:00:00', NULL, NULL, NULL, NULL, NULL, 1),
-	(88, '2024-06-05 09:00:00', '2024-06-05 10:00:00', 'Kevin', 'Durand', 'Kdurant@gmail.com', '0786883088', NULL, 1),
-	(89, '2024-06-05 10:00:00', '2024-06-05 13:00:00', NULL, NULL, NULL, NULL, NULL, 1);
+

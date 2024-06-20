@@ -1,11 +1,10 @@
 from datetime import datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from flask_mail import Mail, Message
-import pymysql.cursors
-import time
 import os
 from dotenv import load_dotenv
 import bcrypt
+import cryptography
 from pony.orm import Database, PrimaryKey, Required, Optional, Set, db_session, select, commit
 
 load_dotenv()
@@ -71,6 +70,13 @@ class Rdv(db.Entity):
     telephone = Optional(str, 10 , nullable=True)
     id_formation = Optional(Formations)
     id_formateur = Required(Formateurs)
+
+class Admin(db.Entity):
+    id_admin = PrimaryKey(int, auto=True)
+    nom = Optional(str, 20)
+    prenom = Optional(str, 20)
+    email = Optional(str, 25)
+    mdp = Optional(str, 255)
 
 db.bind(provider='mysql', host=os.getenv("host"), user=os.getenv("user"), passwd=os.getenv("password"), db=os.getenv("db"),)
 db.generate_mapping(create_tables=False)
@@ -376,5 +382,25 @@ def ajouterrdv():
     return redirect('/')
 
 
+@app.route('/admin', methods=['GET'])
+@db_session
+def admin():
+    
+    return render_template('admin.jinja')
 
+@app.route('/adminok', methods=['POST'])
+@db_session
+def adminok():
+    email = request.form.get('emailConnexion')
+    password = request.form.get('password')
 
+    # Recherche de l'admin dans la base de données avec Pony ORM
+    admin = Admin.get(email=email)
+    
+    if admin and bcrypt.checkpw(password.encode('utf-8'), admin.mdp.encode('utf-8')):
+        # Identifiants valides, démarrer une session pour l'admin
+        session['admin_id'] = admin.id_admin
+        return jsonify({'success': True, 'redirect': url_for('admin')})
+    else:
+        # Identifiants invalides, retourner une réponse JSON avec un message d'erreur
+        return jsonify({'success': False, 'error': 'Identifiant ou mot de passe invalide.'})
