@@ -34,7 +34,6 @@ function afficherModalDetailsRdv(details) {
         <div class="modal-content">
             <span class="close" onclick="fermerModal()">&times;</span>
             <h2>${details.titre}</h2>
-            <p>Date : ${details.debut}</p>
             <p>Durée : ${details.duree} heure(s)</p>
             <p>${details.nom} ${details.prenom}</p>
             <p>Tel : ${details.telephone}</p>
