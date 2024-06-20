@@ -382,25 +382,3 @@ def ajouterrdv():
     return redirect('/')
 
 
-@app.route('/admin', methods=['GET'])
-@db_session
-def admin():
-    
-    return render_template('admin.jinja')
-
-@app.route('/adminok', methods=['POST'])
-@db_session
-def adminok():
-    email = request.form.get('emailConnexion')
-    password = request.form.get('password')
-
-    # Recherche de l'admin dans la base de données avec Pony ORM
-    admin = Admin.get(email=email)
-    
-    if admin and bcrypt.checkpw(password.encode('utf-8'), admin.mdp.encode('utf-8')):
-        # Identifiants valides, démarrer une session pour l'admin
-        session['admin_id'] = admin.id_admin
-        return jsonify({'success': True, 'redirect': url_for('admin')})
-    else:
-        # Identifiants invalides, retourner une réponse JSON avec un message d'erreur
-        return jsonify({'success': False, 'error': 'Identifiant ou mot de passe invalide.'})
