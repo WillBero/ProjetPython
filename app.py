@@ -71,12 +71,7 @@ class Rdv(db.Entity):
     id_formation = Optional(Formations)
     id_formateur = Required(Formateurs)
 
-class Admin(db.Entity):
-    id_admin = PrimaryKey(int, auto=True)
-    nom = Optional(str, 20)
-    prenom = Optional(str, 20)
-    email = Optional(str, 25)
-    mdp = Optional(str, 255)
+
 
 db.bind(provider='mysql', host=os.getenv("host"), user=os.getenv("user"), passwd=os.getenv("password"), db=os.getenv("db"),)
 db.generate_mapping(create_tables=False)
