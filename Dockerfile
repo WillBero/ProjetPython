@@ -1,23 +1,37 @@
 FROM python:3.10-slim
 
-WORKDIR /app
+# Créer un utilisateur non-root
+RUN useradd -m flask
+
+RUN pip install poetry
 
 
+    
+# Installer Poetry en tant que nonrootuser
+USER flask
+WORKDIR /home/flask/app
 
-RUN apt-get update && apt-get upgrade && apt-get install -y curl
 
-RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.4.2
+COPY --chown=flask:flask . .
 
-COPY . .
-
-ENV PATH="/root/.local/bin:$PATH"
+ENV PATH="/home/flask/.local/bin:$PATH"
 
 ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_CREATE=false \
-    POETRY_CACHE_DIR='/var/cache/pypoetry' \
-    POETRY_HOME='/root/.local'
+    POETRY_HOME='/home/flask/.local'
 
-RUN poetry install --no-root
+USER root 
+
+RUN pip install cryptography
+
+RUN mkdir -p /usr/local/lib/python3.10/site-packages /usr/local/bin && \
+    chown -R flask:flask /usr/local/lib/python3.10/site-packages /usr/local/bin
+
+
+USER flask
+
+RUN poetry install --only main --no-interaction --no-root
+
 
 CMD [ "python3", "-m" , "flask", "run","--host=0.0.0.0"]
 
