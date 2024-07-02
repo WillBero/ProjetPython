@@ -10,6 +10,11 @@ services:
       MYSQL_DATABASE: ${db}
       MYSQL_USER: ${user}
       MYSQL_PASSWORD: ${password}
+      MAIL_SERVER :  ${MAIL_SERVER}
+      MAIL_PORT : ${MAIL_PORT}
+      MAIL_USE_SSL : ${MAIL_USE_SSL}
+      MAIL_USERNAME : ${MAIL_USERNAME}
+      MAIL_PASSWORD : ${MAIL_PASSWORD}
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql 
     healthcheck:
