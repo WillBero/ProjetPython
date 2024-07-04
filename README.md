@@ -26,7 +26,7 @@ Il suffit de télécharger le projet entier et de lancer le docker compose à la
 - minikube tunnel
 - Se rendre sur http://web.local
 
-
+## _Contributeurs principaux_
 
 - _Killian Douillet_
 - _Berhault William_
