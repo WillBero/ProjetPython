@@ -6,15 +6,11 @@ services:
     image: mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${root}
-      MYSQL_DATABASE: ${db}
-      MYSQL_USER: ${user}
-      MYSQL_PASSWORD: ${password}
-      MAIL_SERVER :  ${MAIL_SERVER}
-      MAIL_PORT : ${MAIL_PORT}
-      MAIL_USE_SSL : ${MAIL_USE_SSL}
-      MAIL_USERNAME : ${MAIL_USERNAME}
-      MAIL_PASSWORD : ${MAIL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+     
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql 
     healthcheck:
@@ -24,11 +20,11 @@ services:
       retries: 5
     env_file:
       - .env
+    ports:
+      - "3306:3306"
 
   web:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: berowilliam/doodle:latest
     restart: always
     ports:
       - "5000:5000"

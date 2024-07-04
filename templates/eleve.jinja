@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eleve</title>
+</head>
+
+<body>
+    <h1>{{ eleve.nom }} {{ eleve.prenom }}</h1>
+
+    {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="alert alert-success">
+      {{ messages[0] }}
+    </div>
+  {% endif %}
+{% endwith %}
+
+    <h3>Formateurs du Centre :</h3>
+    <ul>
+        {% for formateur in formateurs %}
+            <li>
+                {{ formateur.nom }} {{ formateur.prenom }} {{formateur.nom_formation}} 
+                {% if formateur.disponibilites %}
+                    <ul>
+                        {% for disponibilite in formateur.disponibilites %}
+                            <li>
+                                <form action="{{ url_for('reserver') }}" method="post">
+                                    <input type="hidden" name="id_formateur" value="{{ formateur.id_formateur }}">
+                                    <input type="hidden" name="id_disponibilite" value="{{ disponibilite.id_disponibilite }}">
+                                    <button type="submit">Réserver le {{ disponibilite.date }}</button>
+                                </form>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Aucune disponibilité</p>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+
+
+<h2>Prochain rendez-vous</h2>
+  <ul>
+    {% for rdv in rendez_vous %}
+        <li>
+            {{ rdv.formateur.nom }} {{ rdv.formateur.prenom }}
+            {{ rdv.disponibilite.date }}
+            <form action="{{ url_for('annuler') }}" method="post">
+                <input type="hidden" name="id_disponibilite" value="{{ rdv.id_disponibilite }}">
+                <button type="submit">Annuler le rendez-vous</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+
+<form action ="{{url_for('deconnexion')}}" method="post">
+<button type="submit">Déconnexion</button>
+</form>
+    
+
+</body>
+
+</html>
