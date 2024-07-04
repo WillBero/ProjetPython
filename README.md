@@ -16,6 +16,10 @@ _Docker-compose up -d_
 ### Télécharger KubeCTL ( Admin )
 - curl -LO https://dl.k8s.io/release/v1.30.0/bin/windows/amd64/kubectl.exe
 
+### Ajouter dans le fichier Host 127.0.0.1 web.local
+- C:\Windows\System32\drivers\etc\hosts
+
+
 ### Télécharger Minikube
 - choco install minikube
 - minikube start
