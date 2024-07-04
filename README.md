@@ -13,7 +13,7 @@ Il suffit de télécharger le projet entier et de lancer le docker compose à la
 ### Télécharger KubeCTL ( Admin )
 - _curl -LO https://dl.k8s.io/release/v1.30.0/bin/windows/amd64/kubectl.exe_
 
-### Ajouter dans le fichier _Host 127.0.0.1 web.local_
+### Ajouter dans le fichier Host: _127.0.0.1 web.local_
 - _C:\Windows\System32\drivers\etc\hosts_
 
 
